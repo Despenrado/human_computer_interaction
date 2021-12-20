@@ -21,7 +21,7 @@ DATASET_PATH = 'data/mini_speech_commands'
 
 data_dir = pathlib.Path(DATASET_PATH)
 
-with open('commands.json') as json_file:
+with open('./data/commands.json') as json_file:
     commands = json.load(json_file)
 commands = np.array(commands)
 print('Commands:', commands)
@@ -193,7 +193,7 @@ plt.xlabel('Prediction')
 plt.ylabel('Label')
 plt.show()
 
-sample_file = data_dir / 'otworz/84.wav'
+sample_file = data_dir / 'otworz/vl84.wav'
 
 sample_ds = preprocess_dataset([str(sample_file)])
 

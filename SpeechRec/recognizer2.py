@@ -18,7 +18,7 @@ DATASET_PATH = 'data/mini_speech_commands'
 
 data_dir = pathlib.Path(DATASET_PATH)
 
-with open('commands.json') as json_file:
+with open('./data/commands.json') as json_file:
     commands = json.load(json_file)
 commands = np.array(commands)
 print('Commands:', commands)
@@ -99,10 +99,25 @@ model = tf.keras.models.load_model('model')
 # plt.legend(['loss', 'val_loss'])
 # plt.show()
 
-sample_file = data_dir / 'otworz/11.wav'
-
+sample_file = data_dir / 'otworz/vl12.wav'
 sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
 
+
+sample_file = data_dir / 'uruchom/vl12.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
+
+sample_file = data_dir / 'czas/vl12.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
 for spectrogram, label in sample_ds.batch(1):
     prediction = model(spectrogram)
     plt.bar(commands, tf.nn.softmax(prediction[0]))
@@ -111,5 +126,51 @@ for spectrogram, label in sample_ds.batch(1):
 
 
 
+sample_file = data_dir / 'otworz/ns12.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
 
 
+sample_file = data_dir / 'uruchom/ns12.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
+
+sample_file = data_dir / 'czas/ns12.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
+
+sample_file = data_dir / 'otworz/vb12.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
+
+sample_file = data_dir / 'uruchom/Record (online-voice-recorder.com) - 2021-12-08T205617.249.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()
+
+sample_file = data_dir / 'czas/Record (online-voice-recorder.com) (31) - Copy.wav'
+sample_ds = preprocess_dataset([str(sample_file)])
+for spectrogram, label in sample_ds.batch(1):
+    prediction = model(spectrogram)
+    plt.bar(commands, tf.nn.softmax(prediction[0]))
+    plt.title(f'Predictions for "{commands[label[0]]}"')
+    plt.show()

@@ -4,7 +4,7 @@ import json
 
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
+import matplotlib as sns
 import tensorflow as tf
 import torch
 
@@ -24,7 +24,7 @@ data_dir = pathlib.Path(DATASET_PATH)
 commands = np.array(tf.io.gfile.listdir(str(data_dir)))
 commands = commands[commands != 'README.md']
 print('Commands:', commands)
-with open('commands.json', 'w', encoding='utf-8') as f:
+with open('./data/commands.json', 'w', encoding='utf-8') as f:
     f.write(json.dumps(commands.tolist()))
 
 filenames = tf.io.gfile.glob(str(data_dir) + '/*/*')
@@ -35,9 +35,15 @@ print('Number of examples per label:',
       len(tf.io.gfile.listdir(str(data_dir/commands[0]))))
 print('Example file tensor:', filenames[0])
 
-train_files = filenames[:6400]
-val_files = filenames[6400: 6400 + 800]
-test_files = filenames[-800:]
+
+print("____________________________________________________")
+print("int(len(filenames)*0.8)",int(len(filenames)*0.8))
+print("int(len(filenames)*0.8+len(filenames)*0.1)",int(len(filenames)*0.8+len(filenames)*0.1))
+print("-int(len(filenames)*0.1)",-int(len(filenames)*0.1))
+print("____________________________________________________")
+train_files = filenames[:int(len(filenames)*0.8)]
+val_files = filenames[int(len(filenames)*0.8):int(len(filenames)*0.8+len(filenames)*0.1)]
+test_files = filenames[-int(len(filenames)*0.1):]
 
 print('Training set size', len(train_files))
 print('Validation set size', len(val_files))
@@ -260,18 +266,19 @@ test_acc = sum(y_pred == y_true) / len(y_true)
 print(f'Test set accuracy: {test_acc:.0%}')
 
 
-confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
-plt.figure(figsize=(10, 8))
-sns.heatmap(confusion_mtx,
-            xticklabels=commands,
-            yticklabels=commands,
-            annot=True, fmt='g')
-plt.xlabel('Prediction')
-plt.ylabel('Label')
-plt.show()
+# confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
+# plt.figure(figsize=(10, 8))
+# sns.heatmap(confusion_mtx,
+#             xticklabels=commands,
+#             yticklabels=commands,
+#             annot=True, fmt='g')
+# plt.xlabel('Prediction')
+# plt.ylabel('Label')
+# plt.show()
 
+model.save('model')
 
-sample_file = data_dir/'otworz/84.wav'
+sample_file = data_dir/'otworz/vl84.wav'
 
 sample_ds = preprocess_dataset([str(sample_file)])
 
@@ -280,5 +287,3 @@ for spectrogram, label in sample_ds.batch(1):
   plt.bar(commands, tf.nn.softmax(prediction[0]))
   plt.title(f'Predictions for "{commands[label[0]]}"')
   plt.show()
-
-model.save('model')
